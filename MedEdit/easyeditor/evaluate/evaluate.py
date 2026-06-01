@@ -46,7 +46,7 @@ def change_alpha_pattern(args, model,prompt2alpha, hparams, prompt):
     model.save_pretrained(save_path)
     base_model = model.get_base_model()
     adapter_config = json.load(open(f'{save_path}/adapter_config.json','r' ,encoding='utf-8'))
-    adapter_config['alpha_pattern'] = prompt2alpha[prompt]
+    adapter_config['alpha_pattern'] = prompt2alpha.get(prompt, hparams.alpha_pattern)
     json.dump(adapter_config, open(f'{save_path}/adapter_config.json', 'w',encoding='utf-8'), indent=4, ensure_ascii=False)
     model = PeftModel.from_pretrained(base_model, save_path, is_trainable=False)
     return model
